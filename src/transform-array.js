@@ -6,29 +6,27 @@ module.exports = function transform(arr) {
   // console.log(`Input ${JSON.stringify(arr)}`)
 
   if (Array.isArray(arr)) {
-    let arrProto = [...arr];
     let newArr = [];
-    for (let i = 0; i < arrProto.length; i++) {
-      if (typeof arrProto[i] === 'number' && arrProto[i] !== NaN) {
-        newArr.push(arrProto[i]);
-      } else if (arrProto[i] === '--discard-next') {
-        // arrProto.splice(i - 1, 2)
-        i += 2
-      } else if (arrProto[i] === '--double-next') {
-        newArr.push(arrProto[i + 1]);
-      } else if (arrProto[i] === '--discard-prev') {
-        newArr.pop();
-        // newArr.splice(i - 1, 0, '')
-        newArr[i - 1] = '';
-      } else if (arrProto[i] === '--double-prev') {
-        newArr.push(arrProto[i - 1]);
-      } else if (!arrProto[i]) {
-        newArr = newArr;
-      }
+    for (let i = 0; i < arr.length; i++) {
+       if (arr[i] === '--discard-next') {
+          // arrProto.splice(i - 1, 2)
+          i += 2
+       } else  if (arr[i] === '--discard-prev') {
+          newArr.pop();
+          // newArr.splice(i - 1, 0, '')
+          // newArr[i - 1] = '';
+       } else if (arr[i] === '--double-next') {
+         if(arr[i + 1] !== undefined){
+          newArr.push(arr[i + 1]);}
+       } else if (arr[i] === '--double-prev') {
+         if(arr[i - 1] !== undefined){
+          newArr.push(arr[i - 1]);}
+       } else {
+          newArr.push(arr[i]);
+       }
     }
-    const res = newArr.filter(item => item > 0)
-    return res
-  } else {
+    return newArr
+ } else {
     throw new Error('error')
-  }
+ }
 };
